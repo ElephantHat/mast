@@ -1,5 +1,8 @@
 # basic .procmailrc file to call MAST mailfilter -- UNTESTED
+
+# Need mailbox definitions and such here. 
+
 :0 b
-* ^From.*do\.not\.reply@engr\.orst\.edu
+* ^From.*do.not.reply@engr.orst.edu
 * ^Subject*.Advising Signup
 | python mast-filter.py
