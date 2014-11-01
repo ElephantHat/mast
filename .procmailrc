@@ -1,6 +1,4 @@
-# basic .procmailrc file to call MAST mailfilter -- UNTESTED
-
-# Need mailbox definitions and such here. 
+# basic .procmailrc file to call MAST mailfilter -- TESTED, FUNCTIONAL
 
 :0 b
 * ^From.*do.not.reply@engr.orst.edu
