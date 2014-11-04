@@ -1,0 +1,6 @@
+Open terminal, type: ssh -D <port_number> -C -N <username>@access.engr.oregonstate.edu
+In chrome- go to advanced settings->change proxy settings
+Change method from none to manual
+Under "Socks Host" type 127.0.0.1 in the first box and <port_number> in the second box
+In chrome go to mysql.eecs.oregonstate.edu
+...and then you should have database access!
