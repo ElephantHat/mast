@@ -15,8 +15,6 @@ class Appointment:
         #self.advisor = advisor
         self.student = student
 
-
-
 def main():
     appointment_list = []
     advisor_name = raw_input("Enter your name: ")
@@ -25,6 +23,13 @@ def main():
     cur = database.create_cursor()
 
     #perform query on db
+    
+    """
+    A quick note: these values will not work if ran again, to test with new values,
+    change at least the time, date, or advisor, then it should work
+    """
+    database.add_appointment(cur, "John Doe", "advisor1@oregonstate.edu", "New student", "new student email", "12-04-2013", "1:00am")
+    
     database.get_appointments(cur, advisor_name)
 
     #put matching appointments in list
