@@ -6,6 +6,7 @@ Make sure to exit using 'q' and not CTRL-C
 
 import curses
 import MySQLdb
+import database
 
 class Appointment:
     def __init__(self, time, date, student):
@@ -15,18 +16,21 @@ class Appointment:
         self.student = student
 
 def main():
-    #connect to db
-
+    appointment_list = []
     advisor_name = raw_input("Enter your name: ")
 
-    db = MySQLdb.connect(host='mysql.eecs.oregonstate.edu',
-                         user='cs419-group1',
-                         passwd='RddS6d6jEvaEXY4J',
-                         db='cs419-group1')
-    #create db cursor object
-    cur = db.cursor()
-    appointment_list = []
-    cur.execute("SELECT * FROM appointment INNER JOIN advisor ON advisor.id=aid INNER JOIN student ON student.id=sid WHERE advisor.name='"+advisor_name+"'")
+    #create a cursor to perform database actions with
+    cur = database.create_cursor()
+
+    #perform query on db
+    
+    """
+    A quick note: these values will not work if ran again, to test with new values,
+    change at least the time, date, or advisor, then it should work
+    """
+    database.add_appointment(cur, "John Doe", "advisor1@oregonstate.edu", "New student", "new student email", "12-04-2013", "1:00am")
+    
+    database.get_appointments(cur, advisor_name)
 
     #put matching appointments in list
     number_of_appointments = 0
