@@ -28,10 +28,10 @@ CREATE TABLE appointment (
   FOREIGN KEY (aid) REFERENCES student (id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO advisor(id, email, name)
+INSERT INTO advisor(id, email)
 VALUES (
     DEFAULT,
-    "advisor1@oregonstate.edu",
+    "advisor1@oregonstate.edu"
 );
 
 INSERT INTO student(id, email, name)
