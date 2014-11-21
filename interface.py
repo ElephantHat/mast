@@ -7,6 +7,8 @@ Make sure to exit using 'q' and not CTRL-C
 import curses
 import MySQLdb
 import database
+import signal
+import sys
 
 class Appointment:
     def __init__(self, time, date, student):
@@ -62,6 +64,12 @@ def main():
        if event == ord("q"): break 
         
     curses.endwin()    
+
+def signal_handler(signal, frame):
+    print("You have Ctrl+C'd, meaning you want to exit in this context.")
+    #curses.endwin()
+    sys.exit(0)# Isn't this all the functionality needed for CTRL-C? --Kabir
+signal.signal(signal.SIGINT,signal_handler)
 
 if __name__ == "__main__":
     main()
