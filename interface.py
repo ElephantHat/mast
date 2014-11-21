@@ -66,7 +66,7 @@ def main():
     curses.endwin()    
 
 def signal_handler(signal, frame):
-    print("You have Ctrl+C'd, meaning you want to exit in this context.")
+    print("CTRL-C: Goodbye...")
     #curses.endwin()
     sys.exit(0)# Isn't this all the functionality needed for CTRL-C? --Kabir
 signal.signal(signal.SIGINT,signal_handler)
