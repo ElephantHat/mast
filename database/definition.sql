@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `appointment`;
+
 DROP TABLE IF EXISTS `advisor`;
 CREATE TABLE advisor (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -15,7 +17,6 @@ CREATE TABLE student (
   UNIQUE KEY email (email)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `appointment`;
 CREATE TABLE appointment (
   apt_date VARCHAR(255) NOT NULL,
   apt_time VARCHAR(255) NOT NULL,
@@ -44,7 +45,7 @@ INSERT INTO appointment(apt_date, apt_time, apt_uid, aid, sid)
 VALUES (
     "12-01-2014",
     "12:30am",
-    "apt_uid-goes-here"
-    (SELECT id FROM advisor WHERE name = "John Doe"),
+    "apt_uid-goes-here",
+    (SELECT id FROM advisor WHERE email = "advisor1@oregonstate.edu"),
     (SELECT id FROM student WHERE name = "Steve Steverson")
 );
