@@ -19,27 +19,17 @@ class Appointment:
 
 def main():
     appointment_list = []
-    advisor_name = raw_input("Enter your name: ")
-
-    #create a cursor to perform database actions with
-    cur = database.create_cursor()
-
-    #perform query on db
-    
-    """
-    A quick note: these values will not work if ran again, to test with new values,
-    change at least the time, date, or advisor, then it should work
-    """
-    database.add_appointment(cur, "John Doe", "advisor1@oregonstate.edu", "New student", "new student email", "12-04-2013", "1:00am")
-    
-    database.get_appointments(cur, advisor_name)
+    advisor_email = "advisor1@oregonstate.edu"
 
     #put matching appointments in list
     number_of_appointments = 0
+    raw_appointments = database.get_appointments(advisor_email)
+
     appointment_list = []
-    for row in cur.fetchall():
-        apt = Appointment(row[1], row[0], row[9])
-        appointment_list.append(apt)
+
+    for appointments in raw_appointments:
+        new_apt = Appointment(appointments[4], appointments[3], appointments[1])
+        appointment_list.append(new_apt)
         number_of_appointments += 1
 
     screen = curses.initscr()
@@ -48,7 +38,7 @@ def main():
     screen.keypad(1)
 
     #print header
-    screen.addstr("Current Appointments:\n") 
+    screen.addstr("Current Appointments:\n")
     screen.addstr(1, 0, "DATE")
     screen.addstr(1, 15, "TIME")
     screen.addstr(1, 25, "STUDENT")
@@ -59,15 +49,15 @@ def main():
         screen.addstr((2+x), 25, appointment_list[x].student)
 
     #TODO: Add ability to select appointments with arrow keys
-    while True: 
-       event = screen.getch() 
-       if event == ord("q"): break 
-        
-    curses.endwin()    
+    while True:
+       event = screen.getch()
+       if event == ord("q"): break
+
+    curses.endwin()
 
 def signal_handler(signal, frame):
     print("CTRL-C: Goodbye...")
-    #curses.endwin()
+    curses.endwin()
     sys.exit(0)# Isn't this all the functionality needed for CTRL-C? --Kabir
 signal.signal(signal.SIGINT,signal_handler)
 
