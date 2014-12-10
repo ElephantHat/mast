@@ -9,17 +9,23 @@ import MySQLdb
 import database
 import signal
 import sys
+from os.path import expanduser
 
 class Appointment:
     def __init__(self, time, date, student):
         self.time = time
         self.date = date
-        #self.advisor = advisor
         self.student = student
 
 def main():
+    home = expanduser("~")
     appointment_list = []
-    advisor_email = "advisor1@oregonstate.edu"
+
+    #read advisor email from ~/.mastrc
+    f = open(home+"/.mastrc", "r")
+    advisor_email = f.readline()
+    f.close()
+    advisor_email = advisor_email.rstrip("\n")
 
     #put matching appointments in list
     number_of_appointments = 0
