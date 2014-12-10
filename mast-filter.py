@@ -20,6 +20,8 @@ Big thanks to Masahide Kanzaki who took RFC 2445 and made it accessible to human
 at his site.
 http://www.kanzaki.com/docs/ical/
 
+Also Wikipedia http://en.wikipedia.org/wiki/ICalendar
+
 Additional thanks to the maintainers of Python documentation. 
 https://docs.python.org/2/library/email-examples.html 
 
@@ -36,50 +38,53 @@ import socket
 import fileinput
 import string
 import re
+from os.path import expanduser
 from pprint import pformat
 from pprint import pprint
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import database
 
 debugs = True
+home = expanduser("~")
 
-# Parse body of email
+
+# Read email body piped from procmail
 mailArray = []
 for line in fileinput.input():
 	mailArray.append(line.split())
 
-id=mailArray[0][0]
+id=mailArray[0][0] # this lets us know when the body section is done
 body=[]
 
 for i in range(3, len(mailArray)):
     if (len(mailArray[i+1])==0):
-        mailArray[i+1].append("\n")
+        mailArray[i+1].append("\n") # some lines are read in as blank, and need a "\n" instead of null
 
+    # build 2d array of relevant parts of email body
     if (mailArray[i+1][0]==id):
         break
     else:
         body.append(mailArray[i])
-        print mailArray[i]
 
-# Get email address from .mastrc
+# Get student info for database
+studentName = studentEmail = ""
+for i in range(1,len(body[1])):
+    studentName+=body[1][i]
+    if i<len(body[1])-1:
+        studentName+=" "
+
+studentEmail=body[2][-1]
+
+# Get email address(es) from .mastrc
 toAddys=[]
-for line in fileinput.input(".mastrc"):
+for line in fileinput.input(home+"/.mastrc"):
     toAddys.append(line.rstrip("\n"))
 
-# Debugging stuff
-if (debugs):
-    f=open("./output.txt", "w")
-    f.write(pformat(body))
-    f.write(id)
-    f.write("\n")
-    f.write(pformat(toAddys))
-    f.write("\n")
-    f.close()
 
 
-
-# me == my email address
-# you == recipient's email address
+# me == sender's email address (Do Not Reply)
+# you == advisor's email address(es)
 me = "do.not.reply@oregonstate.edu"
 you = "; ".join(toAddys)
 
@@ -91,7 +96,6 @@ msg['To'] = you
 
 # Start building attributes for calendar request object
 timecreated = time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())
-uid = timecreated + "@" + socket.gethostname()
 
 # Build the DTSTART and DTEND time objects
 body[3][3]=re.sub(r'[a-z]', "", body[3][3])
@@ -110,6 +114,9 @@ if ampm.lower() == "pm":
 
 dateStart+=" "+aptStartHr+" "+aptStartMin+" 00"
 timestart = time.strftime('%Y%m%dT%H%M%S', time.strptime(dateStart, '%A %B %d %Y %H %M %S'))
+dbDate = time.strftime('%m-%d-%Y', time.strptime(dateStart, '%A %B %d %Y %H %M %S'))
+dbTime = body[4][1]
+
 
 # DTEND   
 ampm=re.sub(r'[0-9]*:[0-9]*', '', body[4][3])
@@ -121,9 +128,22 @@ if ampm.lower() == "pm":
     aptEndHr = str(int(aptEndHr) + 12)
 
 dateEnd+=" "+aptEndHr+" "+aptEndMin+" 00"
-print dateEnd
 timeend = time.strftime('%Y%m%dT%H%M%S', time.strptime(dateEnd, '%A %B %d %Y %H %M %S'))
 
+# Build unique appointment identifier based on advisor and appointment start & end times
+# This needs to be globally unique. In theory no advisor will be double-booked, so this
+# should have no problem being a unique value
+uid = timestart+timeend+toAddys[0]+studentEmail
+
+# Determine whether appointment is confirmed or cancelled
+if body[0][-1].lower() == "confirmed":
+    calMethod="REQUEST"
+    calStatus="CONFIRMED"
+    cancelled = False
+else:
+    calMethod="CANCEL"
+    calStatus="CANCELLED"
+    cancelled = True
 
 
 # Create the body of the message for the email, as well as the description in the calendar request
@@ -146,7 +166,7 @@ The UID attribute must be globally unique in the calendar system
 
 calReq = """\
 BEGIN:VCALENDAR
-METHOD:REQUEST
+METHOD:%s
 PRODID:MAST
 VERSION:2.0
 BEGIN:VEVENT
@@ -159,17 +179,17 @@ SUMMARY:EECS Advising Session
 UID:%s
 DESCRIPTION:%s
 SEQUENCE:0
-STATUS:CONFIRMED
+STATUS:%s
 TRANSP:OPAQUE
 END:VEVENT
 END:VCALENDAR
-""" % (timecreated, timecreated, timestart, timeend, timecreated, uid, calText)
+""" % (calMethod, timecreated, timecreated, timestart, timeend, timecreated, uid, calText, calStatus)
 
 
 # Record the MIME types of both parts - text/plain and text/calendar.
 part1 = MIMEText(mimeText, 'plain')
 part2 = MIMEText(calReq, 'calendar')
-part2.add_header('Content-Disposition', 'attachment', method='REQUEST')
+part2.add_header('Content-Disposition', 'attachment', method=calMethod)
 
 # Attach parts into message container.
 msg.attach(part1)
@@ -179,3 +199,27 @@ msg.attach(part2)
 s = smtplib.SMTP('mail.engr.oregonstate.edu')
 s.sendmail(me, you, msg.as_string())
 s.quit()
+
+# Add/Delete appointment to database
+if cancelled:
+    database.delete_appointment(uid)
+else:
+    database.add_appointment(toAddys[0], studentName, studentEmail, dbDate, dbTime, uid) 
+
+
+# Debugging stuff
+if (debugs):
+    f=open(home+"/output.txt", "w")
+    f.write(pformat(body))
+    f.write(id)
+    f.write("\n")
+    f.write(pformat(toAddys))
+    f.write("\n")
+    f.write("\n")
+    f.write(pformat(mailArray))
+    f.write("\n\n BODY:\n")
+    f.write(pformat(body)+"\n")
+    f.write(calReq)
+    f.close()
+
+
