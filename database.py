@@ -11,7 +11,7 @@ def create_conn():
 def get_appointments(advisor_email):
     db = create_conn()
     cur = db.cursor()
-    cur.execute("SELECT advisor.email, student.name, student.email, apt_date, apt_time, apt_uid FROM appointment INNER JOIN advisor ON advisor.id=aid INNER JOIN student ON student.id=sid WHERE advisor.email='"+advisor_email+"'order by order by apt_date * 1")
+    cur.execute("SELECT advisor.email, student.name, student.email, apt_date, apt_time, apt_uid FROM appointment INNER JOIN advisor ON advisor.id=aid INNER JOIN student ON student.id=sid WHERE advisor.email='"+advisor_email+"'")
     appointments = cur.fetchall()
     db.close()
     return appointments

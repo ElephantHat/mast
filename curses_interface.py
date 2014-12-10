@@ -30,7 +30,7 @@ class AppointmentsInterface:
         self.markedLineNums = []
         self.getOutputLines()
         self.run()
-        self.appointments = get_appointments(advisor_email)
+        
         
     def run(self):
         while True:
