@@ -48,7 +48,8 @@ class AppointmentsInterface:
             elif c == ord('d'):
                 self.cancel_email()
             elif c == ord('q'):
-                self.exit()
+                self.restore_screen
+                break
 
     def cancel_email(self):
         apt_num = self.top_line + self.selected_line
