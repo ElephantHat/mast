@@ -20,15 +20,17 @@ def main():
     home = expanduser("~")
 
 
-    #read advisor email from ~/.mastrc
-    #commenting out for testing...
-    #f = open(home+"/.mastrc", "r")
-    #advisor_email = f.readline()
-    #f.close()
-    #advisor_email = advisor_email.rstrip("\n")
+    #read advisor name and mail from ~/.mastrc
+    f = open(home+"/.mastrc", "r")
+    advisor_info = f.readline().split()
+    f.close()
+    advisor_email = advisor_info[0]
+    advisor_name = ""
+    for i in range(1, len(advisor_info)):
+        advisor_name+=advisor_info[i]
+        if i < len(advisor_info)-1:
+            advisor_name+=" "
 
-    advisor_email = "advisor1@oregonstate.edu"
-    advisor_name = "default advisor"
 
     client = curses_interface.AppointmentsInterface(advisor_email, advisor_name)
 

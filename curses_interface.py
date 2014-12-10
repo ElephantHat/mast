@@ -63,9 +63,7 @@ class AppointmentsInterface:
         message_text = ""
 
         me = "do.not.reply@engr.orst.edu"
-        #for testing
-        #you = self.advisor_email
-        you = "freelin.hummel@gmail.com"
+        you = self.advisor_email
 
         msg_text = '''
 Advising Signup with %s CANCELLED 
