@@ -4,23 +4,21 @@ Here is a basic curses interface - so far it does nothing other than show a list
 Make sure to exit using 'q' and not CTRL-C
 """
 
-import curses
-import curses_interface
 import MySQLdb
 import database
 import signal
 import sys
 from os.path import expanduser
 
-class Appointment:
-    def __init__(self, time, date, student):
-        self.time = time
-        self.date = date
-        self.student = student
+import curses
+import curses_interface
+
+
+
 
 def main():
     home = expanduser("~")
-    appointment_list = []
+
 
     #read advisor email from ~/.mastrc
     #commenting out for testing...
@@ -30,8 +28,10 @@ def main():
     #advisor_email = advisor_email.rstrip("\n")
 
     advisor_email = "advisor1@oregonstate.edu"
+    advisor_name = "default advisor"
 
-    client = curses_interface.AppointmentsInterface(advisor_email)
+    client = curses_interface.AppointmentsInterface(advisor_email, advisor_name)
+
 
 
 if __name__ == "__main__":
