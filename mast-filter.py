@@ -76,17 +76,16 @@ for i in range(1,len(body[1])):
 
 studentEmail=body[2][-1]
 
-# Get email address(es) from .mastrc
-toAddys=[]
-for line in fileinput.input(home+"/.mastrc"):
-    toAddys.append(line.rstrip("\n"))
-
-
+# Get email address from .mastrc
+f = open(home+"/.mastrc", "r")
+advisor_info = f.readline().split()
+f.close()
+advisorEmail = advisor_info[0]
 
 # me == sender's email address (Do Not Reply)
 # you == advisor's email address(es)
 me = "do.not.reply@oregonstate.edu"
-you = "; ".join(toAddys)
+you = advisorEmail
 
 # Create message container - the correct MIME type is multipart/alternative (maybe? it works, anyways)  
 msg = MIMEMultipart('alternative')
@@ -133,7 +132,7 @@ timeend = time.strftime('%Y%m%dT%H%M%S', time.strptime(dateEnd, '%A %B %d %Y %H 
 # Build unique appointment identifier based on advisor and appointment start & end times
 # This needs to be globally unique. In theory no advisor will be double-booked, so this
 # should have no problem being a unique value
-uid = timestart+timeend+toAddys[0]+studentEmail
+uid = timestart+timeend+advisorEmail+studentEmail
 
 # Determine whether appointment is confirmed or cancelled
 if body[0][-1].lower() == "confirmed":
@@ -204,7 +203,7 @@ s.quit()
 if cancelled:
     database.delete_appointment(uid)
 else:
-    database.add_appointment(toAddys[0], studentName, studentEmail, dbDate, dbTime, uid) 
+    database.add_appointment(advisorEmail, studentName, studentEmail, dbDate, dbTime, uid) 
 
 
 # Debugging stuff
@@ -213,7 +212,7 @@ if (debugs):
     f.write(pformat(body))
     f.write(id)
     f.write("\n")
-    f.write(pformat(toAddys))
+    f.write(pformat(advisorEmail))
     f.write("\n")
     f.write("\n")
     f.write(pformat(mailArray))
