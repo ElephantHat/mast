@@ -20,7 +20,6 @@ def delete_appointment(uid):
     db = create_conn()
     cur = db.cursor()
 
-    cur = create_cursor()
     cur.execute("DELETE FROM appointment WHERE apt_uid='"+uid+"'")
 
     db.commit()
