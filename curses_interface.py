@@ -48,7 +48,7 @@ class AppointmentsInterface:
             elif c == ord('d'):
                 self.cancel_email()
             elif c == ord('q'):
-                self.restore_screen
+                self.restore_screen()
                 break
 
     def cancel_email(self):
@@ -90,18 +90,21 @@ Please contact support@engr.oregonstate.edu if you experience problems
         #retrieve appointments from database and add them to the lines to display
         appointments = database.get_appointments(self.advisor_email)
         self.appointment_lines = []
-        num_appointments = 0
         for apt in appointments:
             appt = '%s\t%s\t%s' % (apt[1],apt[3],apt[4])
             self.appointment_lines.append(appt)
 
-        self.num_appointments = len(self.appointment_lines)   
+        #if appointment_lines == []:
+         #   self.appointment_lines.append("No Appointments!")
+
+        self.num_appointments = len(self.appointment_lines)
         
 
     def display_screen(self):
         self.screen.erase()
         top = self.top_line
         bottom = self.top_line+curses.LINES
+        self.screen.addstr(0,0, "No Appointments")
         for (index,line) in enumerate(self.appointment_lines[top:bottom]):
             linenum = self.top_line + index
 
@@ -133,7 +136,6 @@ Please contact support@engr.oregonstate.edu if you experience problems
         elif increment == self.DOWN and (self.top_line+self.selected_line+1) != self.num_appointments and self.selected_line != curses.LINES:
             self.selected_line = next_line
 
-        self.status = "Appointments: Student/Date/Time"
  
     def restore_screen(self):
         curses.initscr()
