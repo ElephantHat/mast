@@ -57,10 +57,20 @@ for line in fileinput.input():
 id=mailArray[0][0] # this lets us know when the body section is done
 body=[]
 
-for i in range(3, len(mailArray)):
+if (len(mailArray[0])==0):
+    mailArray[0].append("\n") # some lines are read in as blank, and need a "\n" instead of null
+
+for i in range(0, len(mailArray)):
+    if i == len(mailArray)-1:
+        break
+
     if (len(mailArray[i+1])==0):
         mailArray[i+1].append("\n") # some lines are read in as blank, and need a "\n" instead of null
 
+    if mailArray[i][0].lower() == "advising":
+        bodyStart = i
+    
+for i in range(bodyStart, len(mailArray)):
     # build 2d array of relevant parts of email body
     if (mailArray[i+1][0]==id):
         break
@@ -113,9 +123,8 @@ if ampm.lower() == "pm":
 
 dateStart+=" "+aptStartHr+" "+aptStartMin+" 00"
 timestart = time.strftime('%Y%m%dT%H%M%S', time.strptime(dateStart, '%A %B %d %Y %H %M %S'))
-dbDate = time.strftime('%m-%d-%Y', time.strptime(dateStart, '%A %B %d %Y %H %M %S'))
-dbTime = body[4][1]
-
+dbDate = time.strftime('%A, %B %d, %Y', time.strptime(dateStart, '%A %B %d %Y %H %M %S'))
+dbTime = body[4][1]+" - "+body[4][3]
 
 # DTEND   
 ampm=re.sub(r'[0-9]*:[0-9]*', '', body[4][3])
