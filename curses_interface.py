@@ -76,7 +76,7 @@ Please contact support@engr.oregonstate.edu if you experience problems
 ''' % (self.advisor_name, student_name, student_email, date, time)
 
         msg = MIMEText(msg_text)
-        msg['Subject'] = 'Advising Signup Cancellation'
+        msg['Subject'] = 'Subject: Advising Signup Cancellation'
         msg['From'] = me
         msg['To'] = you
 
@@ -91,8 +91,7 @@ Please contact support@engr.oregonstate.edu if you experience problems
         appointments = database.get_appointments(self.advisor_email)
         self.appointment_lines = []
         for apt in appointments:
-            aptDate = time.strftime('%m-%d-%Y', time.strptime(apt[3], '%A, %B %d, %Y'))
-            appt = '%s\t%s\t%s' % (apt[1],aptDate,apt[4])
+            appt = '%s\t%s\t%s' % (apt[1],apt[3],apt[4])
             self.appointment_lines.append(appt)
 
         #if appointment_lines == []:
