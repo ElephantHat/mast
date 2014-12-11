@@ -83,6 +83,8 @@ Please contact support@engr.oregonstate.edu if you experience problems
         s = smtplib.SMTP('mail.engr.oregonstate.edu')
         s.sendmail(me, you, msg.as_string())
         s.quit()
+        del self.appointment_lines[apt_num]
+        self.num_appointments = len(self.appointment_lines)
 
     def get_appointment_lines(self):
         #retrieve appointments from database and add them to the lines to display
