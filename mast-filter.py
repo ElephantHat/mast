@@ -45,7 +45,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import database
 
-debugs = True
+debugs = False
 home = expanduser("~")
 
 
@@ -54,7 +54,6 @@ mailArray = []
 for line in fileinput.input():
 	mailArray.append(line.split())
 
-id=mailArray[0][0] # this lets us know when the body section is done
 body=[]
 
 if (len(mailArray[0])==0):
@@ -72,7 +71,8 @@ for i in range(0, len(mailArray)):
     
 for i in range(bodyStart, len(mailArray)):
     # build 2d array of relevant parts of email body
-    if (mailArray[i+1][0]==id):
+    if (mailArray[i][0].lower()=="please"):
+        body.append(mailArray[i])
         break
     else:
         body.append(mailArray[i])
@@ -219,10 +219,8 @@ else:
 if (debugs):
     f=open(home+"/output.txt", "w")
     f.write(pformat(body))
-    f.write(id)
     f.write("\n")
     f.write(pformat(advisorEmail))
-    f.write("\n")
     f.write("\n")
     f.write(pformat(mailArray))
     f.write("\n\n BODY:\n")
