@@ -13,7 +13,6 @@ This interface uses modified code from https://github.com/LyleScott/Python-curse
 """
 
 
-
 class AppointmentsInterface:
     DOWN = 1
     UP = -1
@@ -116,6 +115,7 @@ Please contact support@engr.oregonstate.edu if you experience problems
             else:
                 self.screen.addstr(index, 0, line, curses.A_STANDOUT)
 
+        self.screen.addstr(0,50,"d->delete  q->quit",curses.A_BOLD)
         self.screen.refresh()
 
     def updown(self, increment):
