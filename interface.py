@@ -1,7 +1,12 @@
+#!/usr/bin/env python
 """
-Here is a basic curses interface - so far it does nothing other than show a list of fake appointments.
+Here is a basic curses interface - so far it does nothing other than show a list of appointments.
 
-Make sure to exit using 'q' and not CTRL-C
+Use arrow keys to select appointments.
+
+Delete appointments by pressing 'd'
+
+Quit program by hitting 'q'
 """
 
 import MySQLdb

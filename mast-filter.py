@@ -26,9 +26,6 @@ Additional thanks to the maintainers of Python documentation.
 https://docs.python.org/2/library/email-examples.html 
 
 
-TODO:
-    Allow for appointment cancellation
-    integrate database functionality
 '''
 
 
@@ -97,11 +94,6 @@ advisorEmail = advisor_info[0]
 me = "do.not.reply@oregonstate.edu"
 you = advisorEmail
 
-# Create message container - the correct MIME type is multipart/alternative (maybe? it works, anyways)  
-msg = MIMEMultipart('alternative')
-msg['Subject'] = "New Advising Session"
-msg['From'] = me
-msg['To'] = you
 
 # Start building attributes for calendar request object
 timecreated = time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())
@@ -148,11 +140,18 @@ if body[0][-1].lower() == "confirmed":
     calMethod="REQUEST"
     calStatus="CONFIRMED"
     cancelled = False
+    subject = "New Advising Session"
 else:
     calMethod="CANCEL"
     calStatus="CANCELLED"
     cancelled = True
+    subject = "Advising Session Cancelled"
 
+# Create message container - the correct MIME type is multipart/alternative (maybe? it works, anyways)  
+msg = MIMEMultipart('alternative')
+msg['Subject'] = subject
+msg['From'] = me
+msg['To'] = you
 
 # Create the body of the message for the email, as well as the description in the calendar request
 mimeText = ""
