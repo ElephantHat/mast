@@ -8,7 +8,7 @@ msg_text = '''
 Advising Signup with McGrath, D Kevin Confirmed
 Name: Kabir Kang 
 Email: kangk@orst.edu
-Date: Wednesday, December 31th, 2014
+Date: Thursday, January 1st, 2015
 Time: 11:00am - 11:15am
 
 Please contact support@engr.oregonstate.edu if you experience problems

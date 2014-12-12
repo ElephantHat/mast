@@ -1,9 +1,3 @@
-# Group 1 MAST - Kabir Kang, Bryon Burleigh, Freelin Hummel
-# CS 419
-# This Python file defines a Curses screen that is scrollable. 
-# It accepts keyboard input “d” for deleting entries and “q” for quitting. 
-# If deletion is selected on an appointment, a cancellation email is 
-# generated that will be intercepted by .procmailrc.
 import curses
 import sys
 import random
@@ -13,6 +7,10 @@ import MySQLdb
 import smtplib
 from email.mime.text import MIMEText
 """
+Group 1 MAST - Kabir Kang, Bryon Burleigh, Freelin Hummel
+CS 419
+This Python file defines a Curses screen that is scrollable. It accepts keyboard input d for deleting entries and q for quitting. If deletion is selected on an appointment, a cancellation email is generated that will be intercepted by .procmailrc.
+
 Here is the curses client main interface class
 This interface uses modified code from https://github.com/LyleScott/Python-curses-Scrolling-Example/blob/master/curses_scrolling.py for the scrolling portion of the interface.
 
@@ -39,9 +37,7 @@ class AppointmentsInterface:
         self.get_appointment_lines()
         self.run()
 
-     # Description: This logic listens for keyboard input in the CLI. 
-     # Keying up or down will change the selected appointment. 
-     # ‘D’ deletes and appointment, and ‘Q’ quits.
+# Description: This logic listens for keyboard input in the CLI. Keying up or down will change the selected appointment. D deletes an appointment, and Q quits
    
     def run(self):
         while True:
