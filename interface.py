@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """
-Here is a basic curses interface - so far it does nothing other than show a list of appointments.
+Group 1 MAST - Kabir Kang, Bryon Burleigh, Freelin Hummel
+
+This Python file retrieves an advisor email address and name from the .mastrc file and calls upon curses-interface.py, passing that information.
 
 Use arrow keys to select appointments.
 

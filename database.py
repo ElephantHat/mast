@@ -1,13 +1,18 @@
+# Group 1 MAST
+# Freelin Hummel, Bryon Burleigh, Kabir Kang
+# This Python file establishes a connection with the CS 419 Group 1 database. 
+# It defines 3 crucial methods: listing, creating 
+# and deleting appointments functions.
 import MySQLdb
 
-
+# Description: Establishes connection with Group1 DB
 def create_conn():
     db = MySQLdb.connect(host='mysql.eecs.oregonstate.edu',
                          user='cs419-group1',
                          passwd='RddS6d6jEvaEXY4J',
                          db='cs419-group1')
     return db
-
+# Description: Executes SQL to get appointments by advisor email address
 def get_appointments(advisor_email):
     db = create_conn()
     cur = db.cursor()
@@ -15,7 +20,7 @@ def get_appointments(advisor_email):
     appointments = cur.fetchall()
     db.close()
     return appointments
-
+# Description: Executes SQL to delete appointments from the DB by UID
 def delete_appointment(uid):
     db = create_conn()
     cur = db.cursor()
@@ -25,7 +30,7 @@ def delete_appointment(uid):
     db.commit()
     db.close()
 
-
+# Description: Executes SQL to add appointments to the DB
 def add_appointment(advisor_email, student_name, student_email, date, time, uid):
     db = create_conn()
     cur = db.cursor()

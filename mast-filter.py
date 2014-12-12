@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-''' 
+'''
+MAST Group 1 - Bryon Burleigh, Freelin Hummel, Kabir Kang
+
 Receives email body piped from procmail:
 
     Advising Signup with <advisor> <confirmed|CANCELLED>
